@@ -18,11 +18,6 @@ public class AdjacencyListBFS {
         adjList.get(j).add(i);
     }
 
-    public void removeEdge(int i, int j) {
-        adjList.get(i).remove((Integer) j);
-        adjList.get(j).remove((Integer) i);
-    }
-
     public void bfs(int src) {
         boolean[] visited = new boolean[v];
         Queue<Integer> queue = new LinkedList<>();

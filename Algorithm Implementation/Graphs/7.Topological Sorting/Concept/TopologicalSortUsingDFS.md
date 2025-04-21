@@ -1,5 +1,5 @@
 
-# Topological Sort
+# Topological Sort Using DFS
 
 ## Introduction
 Topological Sort is a linear ordering of vertices in a directed acyclic graph (DAG) such that for every directed edge `u -> v`, vertex `u` comes before vertex `v` in the ordering. It is widely used in scenarios like task scheduling, dependency resolution, and more.

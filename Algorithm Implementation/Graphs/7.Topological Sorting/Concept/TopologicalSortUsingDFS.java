@@ -3,11 +3,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class TopologicalSort {
+public class TopologicalSortUsingDFS {
     public int v;
     public List<List<Integer>> adj;
     
-    TopologicalSort(int v) {
+    TopologicalSortUsingDFS(int v) {
         this.v = v;
         adj = new ArrayList<>(v);
         for (int i = 0; i < v; i++) {
@@ -49,7 +49,7 @@ public class TopologicalSort {
     
 
     public static void main(String args[]) {
-        TopologicalSort g = new TopologicalSort(6);
+        TopologicalSortUsingDFS g = new TopologicalSortUsingDFS(6);
 
         g.addEdge(5,2);
         g.addEdge(5,0);
