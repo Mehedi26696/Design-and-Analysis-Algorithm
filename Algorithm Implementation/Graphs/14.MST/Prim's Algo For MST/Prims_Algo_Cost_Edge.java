@@ -90,7 +90,8 @@ public class Prims_Algo_Cost_Edge {
 
         System.out.println("Enter the number of edges in the graph:");
         int edges = sc.nextInt(); // Read the number of edges from the user
-
+        
+        System.out.println("Enter the edges (source, destination, weight):");
         for(int i=0;i<edges;i++){
             int src = sc.nextInt(); // Read the source vertex of the edge
             int dest = sc.nextInt(); // Read the destination vertex of the edge

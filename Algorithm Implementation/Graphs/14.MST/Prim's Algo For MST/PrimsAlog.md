@@ -152,18 +152,7 @@ public class Prims_Algo_Cost_Edge {
 4. **MST Construction**: Adds edges to the MST and calculates the total weight.
 5. **Graph Representation**: The graph is represented as an adjacency matrix.
 
-### Sample Output
-For the given graph:
-```
-Edges in MST:
-Vertex: 1, Weight: 2
-Vertex: 2, Weight: 3
-Vertex: 4, Weight: 5
-Vertex: 3, Weight: 6
-Total Weight of MST: 16
-```
-
-This implementation is efficient and adheres to the algorithm's steps.
+ 
 
 
 ### Complexity

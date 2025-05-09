@@ -61,7 +61,7 @@ public class Bridges{
                 if (disc[curr] < low[neigh]) { // If the lowest vertex reachable from subtree under neigh is below curr in DFS tree, then curr-neigh is a bridge
                     System.out.println("Bridge: " + curr + " ------- " + neigh);
                 }
-            } else {
+            } else { 
                 low[curr] = Math.min(low[curr], disc[neigh]); // Update low value of curr for parent function calls
             }
         }
