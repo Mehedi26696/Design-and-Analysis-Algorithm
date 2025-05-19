@@ -1,0 +1,460 @@
+
+
+// Dijkstra Algorithm
+
+import java.util.*;
+
+public class dijk {
+
+    static class Edge {
+        int src;
+        int dest;
+        int weight;
+
+        Edge(int src, int dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
+    }
+
+    static class Pair implements Comparable<Pair> {
+
+        int vertex;
+        int cost;
+
+        public Pair(int vertex, int cost) {
+            this.vertex = vertex;
+            this.cost = cost;
+        }
+
+        public int compareTo(Pair p2) {
+            return this.cost - p2.cost;
+        }
+
+    }
+
+    public static void dijkstraalg(ArrayList<Edge> graph[], int src) {
+
+        boolean vis[] = new boolean[graph.length];
+
+        int dist[] = new int[graph.length];
+
+        for (int i = 0; i < dist.length; i++) {
+
+            dist[i] = Integer.MAX_VALUE;
+        }
+
+        dist[src] = 0;
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        pq.add(new Pair(src, 0));
+
+        while (!pq.isEmpty()) {
+
+            Pair curr = pq.poll();
+
+            int node = curr.vertex;
+
+            if (!vis[node]) {
+
+                vis[node] = true;
+
+                for (Edge edge : graph[node]) {
+
+                    int u = edge.src;
+                    int v = edge.dest;
+                    int w = edge.weight;
+
+                    if (dist[v] > w + dist[u]) {
+                        dist[v] = w + dist[u];
+
+                        pq.add(new Pair(v, dist[v]));
+                    }
+
+                }
+
+            }
+
+        }
+
+        for (int i = 0; i < dist.length; i++) {
+            System.out.print(dist[i]+" ");
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        ArrayList<Edge> graph[] = new ArrayList[V];
+
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < E; i++) {
+
+            int src = sc.nextInt();
+            int dest = sc.nextInt();
+            int weight = sc.nextInt();
+
+            graph[src].add(new Edge(src, dest, weight));
+            graph[dest].add(new Edge(dest, src, weight));
+
+        }
+
+        dijkstraalg(graph, 0);
+    }
+}
+
+
+
+// Bellman Ford
+
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class bellman {
+
+    static class Edge {
+        int src;
+        int dest;
+        int weight;
+
+        Edge(int src, int dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
+    }
+
+    public static void bellmanalg(ArrayList<Edge> graph[], int src) {
+
+        int dist[] = new int[graph.length];
+
+        for (int i = 0; i < dist.length; i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
+
+        dist[src] = 0;
+
+        for (int i = 0; i < dist.length - 1; i++) {
+
+            for (int j = 0; j < dist.length; j++) {
+
+                for (Edge edge : graph[j]) {
+
+                    int u = edge.src;
+                    int v = edge.dest;
+                    int w = edge.weight;
+
+                    if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+
+                        dist[v] = w + dist[u];
+
+                    }
+
+                }
+            }
+
+        }
+
+        // negative cycle detection
+
+        for (int j = 0; j < dist.length; j++) {
+
+            for (Edge edge : graph[j]) {
+
+                int u = edge.src;
+                int v = edge.dest;
+                int w = edge.weight;
+
+                if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+
+                    System.out.println("Negative cycle detected");
+                    return;
+
+                }
+
+            }
+        }
+
+        for (int i = 0; i < dist.length; i++) {
+
+            System.out.print(dist[i] + " ");
+        }
+
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        ArrayList<Edge> graph[] = new ArrayList[V];
+
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < E; i++) {
+
+            int src = sc.nextInt();
+            int dest = sc.nextInt();
+            int weight = sc.nextInt();
+
+            graph[src].add(new Edge(src, dest, weight));
+            graph[dest].add(new Edge(dest, src, weight));
+
+        }
+
+        bellmanalg(graph, 0);
+    }
+
+}
+
+
+
+// Prims  
+
+
+
+
+
+import java.util.*;
+
+public class PrimsAlgorithm {
+
+    static class Edge {
+        int src;
+        int dest;
+        int weight;
+
+        Edge(int src, int dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
+    }
+
+    static class Pair implements Comparable<Pair> {
+
+        int src;
+        int dest;
+        int cost;
+
+        public Pair(int src,int dest, int cost) {
+            this.src = src;
+            this.dest = dest;
+            this.cost = cost;
+        }
+
+        public int compareTo(Pair p2) {
+            return this.cost - p2.cost;
+        }
+
+    }
+
+    public static void prims(ArrayList<Edge> graph[]) {
+
+        boolean visited[] = new boolean[graph.length];
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        pq.add( new Pair(0, 0, 0));
+
+
+
+        int totalCost = 0;
+
+        // store edge also
+
+        ArrayList<Edge> mst = new ArrayList<>();
+
+        while (!pq.isEmpty()) {
+
+            Pair curr = pq.poll();
+
+            int src = curr.src;
+            int dest = curr.dest;
+            int cost = curr.cost;
+
+
+            if (!visited[dest]) {
+
+                visited[dest] = true;
+
+                totalCost += cost;
+
+                if (src != dest) {
+                    mst.add(new Edge(src, dest, cost));
+                    
+                }
+
+                for (Edge edge : graph[dest]) {
+
+                    int u = edge.src;
+                    int v = edge.dest;
+                    int w = edge.weight;
+
+                    if (!visited[v]) {
+                        pq.add(new Pair(u, v, w));
+                    }
+
+                }
+
+            }
+            
+        }
+
+
+        System.out.println("Total Cost :"+ totalCost);
+
+        for(Edge edge: mst){
+            System.out.println(edge.src+" "+edge.dest+" "+edge.weight);
+        }
+
+    }
+
+    public static void main(String[] arg) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        ArrayList<Edge> graph[] = new ArrayList[V];
+
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < E; i++) {
+
+            int src = sc.nextInt();
+            int dest = sc.nextInt();
+            int weight = sc.nextInt();
+
+            graph[src].add(new Edge(src, dest, weight));
+            graph[dest].add(new Edge(dest,src, weight));
+
+        }
+
+        prims(graph);
+        sc.close();
+
+    }
+}
+
+
+// Floyd_Warshall_Algo
+
+
+
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class FloydWarshall {
+
+    static class Edge {
+        int src;
+        int dest;
+        int weight;
+
+        Edge(int src, int dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
+    }
+
+    public static void floydWarshall(ArrayList<Edge> graph[]) {
+
+        int V = graph.length;
+        int dist[][] = new int[V][V];
+
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (i == j) {
+                    dist[i][j] = 0;
+                } else {
+                    dist[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+
+        for (int i = 0; i < graph.length; i++) {
+            for (Edge edge : graph[i]) {
+                dist[edge.src][edge.dest] = edge.weight;
+            }
+        }
+
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i][k] != Integer.MAX_VALUE && dist[k][j] != Integer.MAX_VALUE && dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        // negative cycle detection
+        for (int i = 0; i < V; i++) {
+            if (dist[i][i] < 0) {
+                System.out.println("Negative cycle detected");
+                return;
+            }
+        }
+
+        // Print the distance matrix
+        System.out.println("Distance matrix:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][j] == Integer.MAX_VALUE) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(dist[i][j] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        ArrayList<Edge> graph[] = new ArrayList[V];
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < E; i++) {
+
+            int src = sc.nextInt();
+            int dest = sc.nextInt();
+            int weight = sc.nextInt();
+
+            graph[src].add(new Edge(src, dest, weight));
+            // graph[dest].add(new Edge(dest, src, weight));
+
+        }
+
+        floydWarshall(graph);
+        sc.close();
+    }
+
+}
