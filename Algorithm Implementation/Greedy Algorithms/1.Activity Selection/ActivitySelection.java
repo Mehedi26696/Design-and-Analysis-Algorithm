@@ -25,7 +25,7 @@ public class ActivitySelection{
 
         // or
 
-      //  Arrays.sort(end); // Sort the end times
+         //  Arrays.sort(end); // Sort the end times
 
         // Step 2: Select the first activity
         int count = 1; // Count of selected activities

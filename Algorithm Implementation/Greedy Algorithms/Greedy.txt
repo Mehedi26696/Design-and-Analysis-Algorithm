@@ -1,0 +1,365 @@
+
+// Activity Selection
+
+
+
+import java.util.*;
+public class ActivitySelection{
+
+     
+    public static void activity(int start[], int end[], int n) {
+        
+        // Step 1: Sort activities based on their end times
+        // for (int i = 0; i < n - 1; i++) {
+        //     for (int j = 0; j < n - i - 1; j++) {
+        //         if (end[j] > end[j + 1]) {
+        //             // Swap end times
+        //             int tempEnd = end[j];
+        //             end[j] = end[j + 1];
+        //             end[j + 1] = tempEnd;
+
+        //             // Swap start times accordingly
+        //             int tempStart = start[j];
+        //             start[j] = start[j + 1];
+        //             start[j + 1] = tempStart;
+        //         }
+        //     }
+        // }
+
+        // or
+
+         //  Arrays.sort(end); // Sort the end times
+
+        // Step 2: Select the first activity
+        int count = 1; // Count of selected activities
+        int  firstendactivity = end[0]; // End time of the first activity
+
+        // Store the performed activity in the array
+        int[] performedActivities = new int[n];
+
+        performedActivities[0] = 1; // Mark the first activity as performed
+
+        // Step 3: Iterate through the remaining activities
+        for (int i = 1; i < n; i++) {
+            
+            if( start[i] >= firstendactivity) {
+                count++; // Increment count if the activity can be performed
+                firstendactivity = end[i]; // Update the end time of the last selected activity
+
+                performedActivities[count - 1] = i + 1; // Store the performed activity
+            }
+        }
+
+        // Print the performed activities
+        System.out.println("Performed activities: ");
+        for (int i = 0; i < count; i++) {
+            System.out.println("Activity " + performedActivities[i] + " "); // Print each performed activity
+        }
+
+        System.out.println("Total number of activities performed: " + count); // Print the total count of performed activities
+
+        return;
+    }
+    public static void main(String[] args) {
+
+        int n = 5;
+        
+        int start[] = {1, 3, 0, 5, 8};
+        int end[] = {2, 4, 6, 7, 9};  
+
+
+        activity(start, end, n); // Call the activity selection function
+        
+        
+    }
+}
+
+
+//Fractional Knapsack
+
+import java.util.Arrays;
+
+public class FractionalKnapsack {
+
+    public static double getMaxValue(int[] weights, int[] values, int capacity) {
+        double totalValue = 0.0;
+        double[] ratio = new double[weights.length];
+
+
+        // Step 1: Calculate value-to-weight ratio for each item
+        
+        for (int i = 0; i < weights.length; i++) {
+            ratio[i] = (double) values[i] / weights[i];
+        }
+        
+        // Step 2: Sort items by value-to-weight ratio in descending order
+        // for (int i = 0; i < ratio.length - 1; i++) {
+        //     for (int j = 0; j < ratio.length - i - 1; j++) {
+        //         if (ratio[j] < ratio[j + 1]) {
+        //             // Swap ratios
+        //             double tempRatio = ratio[j];
+        //             ratio[j] = ratio[j + 1];
+        //             ratio[j + 1] = tempRatio;
+                    
+        //             // Swap corresponding weights and values
+        //             int tempWeight = weights[j];
+        //             weights[j] = weights[j + 1];
+        //             weights[j + 1] = tempWeight;
+                    
+        //             int tempValue = values[j];
+        //             values[j] = values[j + 1];
+        //             values[j + 1] = tempValue;
+        //         }
+        //     }
+        // }
+
+
+        // or
+
+         Arrays.sort(ratio); // Sort the ratios in descending order
+        
+        // Step 3: Pick items in sorted order until the capacity is full
+
+        for (int i = 0; i < weights.length; i++) {
+            if (capacity <= 0) {
+                break;
+            }
+            
+            if (weights[i] <= capacity) {
+                totalValue += values[i];
+                capacity -= weights[i];
+            } else {
+                totalValue += ratio[i] * capacity;
+                capacity = 0;
+            }
+        }
+        return totalValue;
+    }
+    
+    public static void main(String[] args) {
+        int n = 3; // Number of items
+
+        int[] weights = {30, 10, 20};
+        int[] values = {120, 60, 100};
+        
+        int capacity = 50;
+        
+        double maxValue = getMaxValue(weights, values, capacity);
+        System.out.println("Maximum value in Knapsack = " + maxValue);
+    }
+}
+
+
+
+//Min abs diff pair
+
+import java.util.*;
+
+public class MinAbsDiffPairs {
+
+
+    public static int minAbsDiffPairs(int[] A, int[] B) {
+        Arrays.sort(A);
+        Arrays.sort(B);
+        int n = A.length;
+
+        int totalminDiff = 0;
+
+        for (int i = 0; i < n; i++) {
+             
+            totalminDiff += Math.abs(A[i] - B[i]);
+        }
+        return totalminDiff;
+        
+    }
+
+    public static void main(String[] args) {
+        
+        int n = 5;
+        int[] A = {3,2,1,4,5};
+        int [] B = {4,6,2,1,3};
+        
+        System.out.println("Minimum Absolute Difference: " + minAbsDiffPairs(A, B));
+        
+    }
+    
+}
+
+// Max Len Chair
+
+import java.util.*;
+
+public class MaxLenChainPairs {
+
+    public static int findLongestChain(int[][] pairs) {
+
+        // Sort the pairs based on the second element of each pair
+        // Arrays.sort(pairs, (a, b) -> Integer.compare(a[1], b[1]));
+
+
+        for (int i = 0; i < pairs.length; i++) {
+            for (int j = i + 1; j < pairs.length; j++) {
+                if (pairs[i][1] > pairs[j][0]) {
+                    int[] temp = pairs[i];
+                    pairs[i] = pairs[j];
+                    pairs[j] = temp;
+                }
+            }
+        }
+
+
+
+        
+        int count = 0;
+        int end = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < pairs.length; i++) {
+            // If the current pair's start is greater than the end of the last selected pair
+            if (pairs[i][0] > end) {
+                count++; // Increment the count of pairs in the chain
+                end = pairs[i][1]; // Update the end to the end of the current pair
+            }
+        }
+        
+        return count;
+    }
+
+    public static void main(String[] args) {
+
+        int[][] pairs = {{1,2}, {2,3}, {3,4}};
+        System.out.println("Maximum Length of Pair Chain: " + findLongestChain(pairs));
+        
+    }
+    
+}
+
+
+
+// Coin Change
+
+import java.lang.reflect.Array;
+import java.util.*;
+
+public class Coins {
+
+    public static void main(String[] args) {
+
+        int[] coins = { 1, 2, 5, 10, 20, 50, 100, 500, 2000 }; // coin denominations
+
+        Scanner sc = new Scanner(System.in);
+        int amount = sc.nextInt(); // amount to make change for
+
+        // Arrays.sort(coins, Comparator.reverseOrder()); // sort the coins in
+        // descending order
+
+        // or
+
+        for (int i = 0; i < coins.length; i++) { // sort the coins in descending order
+            for (int j = i + 1; j < coins.length; j++) {
+                if (coins[i] < coins[j]) {
+                    int temp = coins[i];
+                    coins[i] = coins[j];
+                    coins[j] = temp;
+                }
+            }
+        }
+
+        int count = 0; // number of coins used
+
+        ArrayList<Integer> coinsUsed = new ArrayList<>(); // list to store the coins used
+        for (int i = 0; i < coins.length; i++) {
+
+            if (coins[i] <= amount) { // if the coin is less than or equal to the amount
+
+                while (coins[i] <= amount) { // while the amount is greater than or equal to the coin
+                    amount -= coins[i]; // subtract the coin from the amount
+                    count++; // increment the count of coins used
+                    coinsUsed.add(coins[i]); // add the coin to the list of coins used
+                }
+            }
+        }
+
+        System.out.println("Minimum number of coins/notes required: " + count); // print the number of coins used
+
+        System.out.print("Coins/notes used: "); // print the coins used
+        for (int i = 0; i < coinsUsed.size(); i++) { // print the coins used
+            System.out.print(coinsUsed.get(i) + " "); // print the coin
+        }
+        System.out.println(); // print a new line
+    }
+
+}
+
+
+
+// Job Sequencing
+
+import java.lang.reflect.Array;
+import java.util.*;
+public class JobSequencing {
+
+    static class Job {
+        int id;
+        int deadline;
+        int profit;
+
+        Job(int id, int deadline, int profit) {
+            this.id = id;
+            this.deadline = deadline;
+            this.profit = profit;
+        }
+    }
+
+    // Function to schedule jobs to maximize profit
+
+    public static int jobScheduling(ArrayList<Job> jobs) {
+        // Sort jobs based on profit in descending order
+        Collections.sort(jobs, (a, b) -> b.profit - a.profit);
+
+        int n = jobs.size();
+         
+        int maxProfit = 0;
+
+        ArrayList<Integer> seq = new ArrayList<>();
+
+        int time = 0;
+
+        for(int i=0;i<jobs.size();i++){
+             
+            Job curr = jobs.get(i);
+            // Check if the job can be scheduled within its deadline
+
+            if (time < curr.deadline) {
+                // Schedule the job
+                seq.add(curr.id);
+                time++;
+                maxProfit += curr.profit;
+            }  
+        }
+
+        // Print the scheduled jobs
+        System.out.println("Scheduled Jobs: " + seq);
+
+        return maxProfit;
+    }
+    public static void main(String[] args) {
+        
+        int n = 4; // Number of jobs
+         ArrayList<Job> jobs = new ArrayList<>(n);
+        Scanner sc = new Scanner(System.in);
+        for (int i = 0; i < n; i++) {
+            
+            System.out.print("Enter job id, deadline and profit for job " + (i + 1) + ": ");
+            int id = sc.nextInt();
+            int deadline = sc.nextInt();
+            int profit = sc.nextInt();
+            jobs.add(new Job(id, deadline, profit));
+
+             
+        }
+
+        int maxProfit = jobScheduling(jobs);
+        System.out.println("Maximum Profit: " + maxProfit);
+    }
+    
+}

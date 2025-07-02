@@ -1,7 +1,7 @@
 public class Fibonacci {
 
     // Function to calculate Fibonacci number using recursion
-    
+
     static int usingRecursion(int n) {
         if (n <= 1) {
             return n;
@@ -13,13 +13,13 @@ public class Fibonacci {
         if (n <= 1) {
             return n;
         }
-        if (d[n] != 0) { // Check if the value is already computed 
+        if (d[n] != 0) { // Check if the value is already computed
             return d[n];
         }
         d[n] = dpmemoization(n - 1, d) + dpmemoization(n - 2, d); // Store the computed value
         return d[n];
     }
-    
+
     static int dpTabulation(int n) {
         int[] dp = new int[n + 1]; // Array to store Fibonacci numbers
         dp[0] = 0; // Base case
@@ -33,10 +33,9 @@ public class Fibonacci {
         return dp[n]; // Return the nth Fibonacci number
     }
 
-
     public static void main(String[] args) {
-        int n = 10;  
-        
+        int n = 10;
+
         // Using recursion
         System.out.println("Fibonacci of " + n + " using recursion is: " + usingRecursion(n));
 
@@ -48,12 +47,9 @@ public class Fibonacci {
         System.out.println("Fibonacci of " + n + " using tabulation is: " + dpTabulation(n));
     }
 
-    
-    
 }
 
-
-
-// Time Complexity:// - Recursion: O(2^n) due to the exponential growth of recursive calls.
+// Time Complexity:// - Recursion: O(2^n) due to the exponential growth of
+// recursive calls.
 //// - Memoization: O(n) as each Fibonacci number is computed once and stored.
 // - Tabulation: O(n) as it iteratively fills the dp array.

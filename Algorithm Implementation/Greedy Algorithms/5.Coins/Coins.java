@@ -1,23 +1,20 @@
- 
 
 // Calculate the minim number of coins/notes to make change for a given amount using a set of coins/notes.
 
-
 import java.lang.reflect.Array;
 import java.util.*;
+
 public class Coins {
 
     public static void main(String[] args) {
 
-       int[] coins = {1, 2,5,10,20,50,100,500,2000}; // coin denominations
+        int[] coins = { 1, 2, 5, 10, 20, 50, 100, 500, 2000 }; // coin denominations
 
-       
-        
         Scanner sc = new Scanner(System.in);
         int amount = sc.nextInt(); // amount to make change for
 
-        
-       // Arrays.sort(coins, Comparator.reverseOrder()); // sort the coins in descending order
+        // Arrays.sort(coins, Comparator.reverseOrder()); // sort the coins in
+        // descending order
 
         // or
 
@@ -31,25 +28,21 @@ public class Coins {
             }
         }
 
-        
-
-         
-        
-        int count = 0; // number of coins used  
+        int count = 0; // number of coins used
 
         ArrayList<Integer> coinsUsed = new ArrayList<>(); // list to store the coins used
-        for (int i = 0; i <coins.length; i++) {
+        for (int i = 0; i < coins.length; i++) {
 
-            if(coins[i] <= amount) { // if the coin is less than or equal to the amount
-                
+            if (coins[i] <= amount) { // if the coin is less than or equal to the amount
+
                 while (coins[i] <= amount) { // while the amount is greater than or equal to the coin
                     amount -= coins[i]; // subtract the coin from the amount
                     count++; // increment the count of coins used
                     coinsUsed.add(coins[i]); // add the coin to the list of coins used
                 }
-            }  
+            }
         }
-   
+
         System.out.println("Minimum number of coins/notes required: " + count); // print the number of coins used
 
         System.out.print("Coins/notes used: "); // print the coins used
@@ -58,5 +51,5 @@ public class Coins {
         }
         System.out.println(); // print a new line
     }
-    
+
 }
