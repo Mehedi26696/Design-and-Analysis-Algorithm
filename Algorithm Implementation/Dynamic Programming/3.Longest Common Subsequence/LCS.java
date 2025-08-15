@@ -48,6 +48,23 @@ public class LCS {
                 }
             }
         }
+
+        // lcs print
+
+        StringBuilder lcs = new StringBuilder();
+        int x = n, y = m;
+        while (x > 0 && y > 0) {
+            if (str1.charAt(x - 1) == str2.charAt(y - 1)) {
+                lcs.append(str1.charAt(x - 1));
+                x--;
+                y--;
+            } else if (dp[x - 1][y] > dp[x][y - 1]) {
+                x--;
+            } else {
+                y--;
+            }
+        }
+        System.out.println("LCS: " + lcs.reverse().toString());
         return dp[n][m];
     }
 

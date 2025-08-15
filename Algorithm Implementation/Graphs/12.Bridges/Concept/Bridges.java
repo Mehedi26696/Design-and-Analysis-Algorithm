@@ -57,12 +57,12 @@ public class Bridges{
             }
             else if (!visited[neigh]) {
                 tarjanBridgeUtil(graph, neigh, curr, visited, disc, low, time);
-                low[curr] = Math.min(low[curr], low[neigh]); // Update low value of curr for parent function calls
+                low[curr] = Math.min(low[curr], low[neigh]); // Update low value of curr for parent function calls // this is a tree edge
                 if (disc[curr] < low[neigh]) { // If the lowest vertex reachable from subtree under neigh is below curr in DFS tree, then curr-neigh is a bridge
                     System.out.println("Bridge: " + curr + " ------- " + neigh);
                 }
             } else { 
-                low[curr] = Math.min(low[curr], disc[neigh]); // Update low value of curr for parent function calls
+                low[curr] = Math.min(low[curr], disc[neigh]); // Update low value of curr for parent function calls // this is a back edge
             }
         }
     }

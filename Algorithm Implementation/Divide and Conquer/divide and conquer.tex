@@ -1,0 +1,1018 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=red
+}
+
+% Color definitions
+\definecolor{lightgray}{gray}{0.95}
+\definecolor{darkgray}{gray}{0.3}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Code listing style for Java
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Title formatting
+\titleformat{\section}{\normalfont\Large\bfseries\color{blue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{darkgray}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{black}}{\thesubsubsection}{1em}{}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Divide and Conquer Algorithms}
+\lhead{DSA Implementation Guide}
+\cfoot{\thepage}
+
+% Title page setup
+\title{\textbf{Divide and Conquer Algorithms:\\A Comprehensive Implementation Guide}}
+\author{
+    \textbf{Data Structures and Algorithms}\\
+    \textit{Professional Implementation in Java}\\
+    \vspace{0.5em}
+    \small Design and Analysis of Algorithms
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\rule{\textwidth}{2pt}
+\vspace{0.5em}
+\large \textbf{Advanced Algorithm Analysis and Implementation}
+\vspace{0.5em}
+\rule{\textwidth}{1pt}
+\end{center}
+
+\vspace{2em}
+
+\begin{abstract}
+This document presents a comprehensive analysis and implementation of fundamental divide-and-conquer algorithms. Each algorithm is thoroughly explained with mathematical foundations, complexity analysis, and professional Java implementations. The covered algorithms include inversion counting using merge sort, closest pair of points problem, modular exponentiation, and selection algorithms. These implementations demonstrate optimal time complexities and practical programming techniques essential for competitive programming and software development.
+\end{abstract}
+
+\vspace{1em}
+\tableofcontents
+\newpage
+
+\section{Introduction to Divide and Conquer}
+
+\subsection{Paradigm Overview}
+The divide-and-conquer paradigm is a fundamental algorithmic approach that solves complex problems by:
+
+\begin{enumerate}[itemsep=0.5em]
+    \item \textbf{Divide:} Breaking the problem into smaller subproblems of the same type
+    \item \textbf{Conquer:} Solving the subproblems recursively (base case for small problems)
+    \item \textbf{Combine:} Merging the solutions to solve the original problem
+\end{enumerate}
+
+\subsection{Mathematical Foundation}
+Most divide-and-conquer algorithms follow the recurrence relation:
+\[
+T(n) = aT\left(\frac{n}{b}\right) + f(n)
+\]
+
+where $a$ is the number of subproblems, $\frac{n}{b}$ is the size of each subproblem, and $f(n)$ is the cost of combining solutions.
+
+\newpage
+
+\section{Counting Inversions using Merge Sort}
+
+\subsection{Problem Statement}
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!50!black,title=\textbf{Inversion Count Problem}]
+Given an array $A[0..n-1]$ of distinct integers, count the number of \textbf{inversions}. An inversion is a pair of indices $(i, j)$ such that $i < j$ and $A[i] > A[j]$.
+
+\textbf{Example:} For array $[2, 3, 8, 6, 1]$, inversions are: $(0,4), (1,4), (2,3), (2,4), (3,4)$
+\end{tcolorbox}
+
+\subsection{Algorithm Analysis}
+
+\subsubsection{Naive Approach}
+The brute force solution checks all pairs $(i,j)$ with $i < j$, resulting in $O(n^2)$ time complexity.
+
+\subsubsection{Divide and Conquer Approach}
+We modify merge sort to count inversions efficiently:
+
+\begin{itemize}
+    \item \textbf{Divide:} Split array into two halves
+    \item \textbf{Conquer:} Recursively count inversions in both halves
+    \item \textbf{Combine:} Count split inversions during merge process
+\end{itemize}
+
+\textbf{Key Insight:} During merging, if $left[i] > right[j]$, then $left[i]$ forms inversions with all remaining elements in the right subarray starting from index $j$.
+
+\subsection{Mathematical Analysis}
+
+\textbf{Recurrence Relation:}
+\[
+T(n) = 2T\left(\frac{n}{2}\right) + O(n)
+\]
+
+\textbf{Solution by Master Theorem:}
+\[
+T(n) = O(n \log n)
+\]
+
+\subsection{Java Implementation}
+
+\begin{lstlisting}[language=Java, caption=Professional Inversion Count Implementation]
+public class InversionCounter {
+    
+    /**
+     * Counts the number of inversions in the given array
+     * Time Complexity: O(n log n)
+     * Space Complexity: O(n)
+     * 
+     * @param arr the input array
+     * @return number of inversions
+     */
+    public static long countInversions(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return 0;
+        }
+        
+        int[] temp = new int[arr.length];
+        return mergeSortAndCount(arr, temp, 0, arr.length - 1);
+    }
+    
+    /**
+     * Recursive function to sort array and count inversions
+     */
+    private static long mergeSortAndCount(int[] arr, int[] temp, 
+                                         int left, int right) {
+        long invCount = 0;
+        
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+            
+            // Count inversions in left and right halves
+            invCount += mergeSortAndCount(arr, temp, left, mid);
+            invCount += mergeSortAndCount(arr, temp, mid + 1, right);
+            
+            // Count split inversions during merge
+            invCount += mergeAndCount(arr, temp, left, mid, right);
+        }
+        
+        return invCount;
+    }
+    
+    /**
+     * Merges two sorted subarrays and counts split inversions
+     */
+    private static long mergeAndCount(int[] arr, int[] temp, 
+                                     int left, int mid, int right) {
+        // Copy elements to temporary array
+        for (int i = left; i <= right; i++) {
+            temp[i] = arr[i];
+        }
+        
+        int i = left;    // Left subarray index
+        int j = mid + 1; // Right subarray index
+        int k = left;    // Merged array index
+        long invCount = 0;
+        
+        // Merge while counting inversions
+        while (i <= mid && j <= right) {
+            if (temp[i] <= temp[j]) {
+                arr[k++] = temp[i++];
+            } else {
+                arr[k++] = temp[j++];
+                // All elements from i to mid are greater than temp[j]
+                invCount += (mid - i + 1);
+            }
+        }
+        
+        // Copy remaining elements
+        while (i <= mid) {
+            arr[k++] = temp[i++];
+        }
+        while (j <= right) {
+            arr[k++] = temp[j++];
+        }
+        
+        return invCount;
+    }
+    
+    /**
+     * Test method with example
+     */
+    public static void main(String[] args) {
+        int[] arr = {2, 3, 8, 6, 1};
+        System.out.println("Array: " + java.util.Arrays.toString(arr));
+        System.out.println("Number of inversions: " + countInversions(arr));
+        // Output: 5
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Closest Pair of Points (2D)}
+
+\subsection{Problem Statement}
+\begin{tcolorbox}[colback=green!5!white,colframe=green!50!black,title=\textbf{Closest Pair Problem}]
+Given $n$ points in a 2D plane, find the pair of points with the minimum Euclidean distance between them.
+
+\textbf{Distance Formula:} $d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$
+\end{tcolorbox}
+
+\subsection{Algorithm Strategy}
+
+\begin{enumerate}
+    \item \textbf{Preprocessing:} Sort points by x-coordinate and create y-sorted copy
+    \item \textbf{Divide:} Split points by vertical line at median x-coordinate
+    \item \textbf{Conquer:} Recursively find closest pairs in left and right halves
+    \item \textbf{Combine:} Check points near the dividing line for closer pairs
+\end{enumerate}
+
+\textbf{Key Optimization:} In the strip around the dividing line, each point needs to be compared with at most 7 other points (geometric property).
+
+\subsection{Java Implementation}
+
+\begin{lstlisting}[language=Java, caption=Closest Pair of Points Implementation]
+import java.util.*;
+
+public class ClosestPairFinder {
+    
+    static class Point {
+        double x, y;
+        
+        Point(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+        
+        double distanceTo(Point other) {
+            double dx = this.x - other.x;
+            double dy = this.y - other.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+        
+        @Override
+        public String toString() {
+            return String.format("(%.2f, %.2f)", x, y);
+        }
+    }
+    
+    static class PointPair {
+        Point p1, p2;
+        double distance;
+        
+        PointPair(Point p1, Point p2) {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.distance = p1.distanceTo(p2);
+        }
+    }
+    
+    /**
+     * Finds the closest pair of points using divide and conquer
+     * Time Complexity: O(n log n)
+     * Space Complexity: O(n)
+     */
+    public static PointPair findClosestPair(Point[] points) {
+        if (points.length < 2) {
+            throw new IllegalArgumentException("Need at least 2 points");
+        }
+        
+        // Sort points by x-coordinate
+        Point[] pointsByX = points.clone();
+        Arrays.sort(pointsByX, (p1, p2) -> Double.compare(p1.x, p2.x));
+        
+        // Create array sorted by y-coordinate
+        Point[] pointsByY = points.clone();
+        Arrays.sort(pointsByY, (p1, p2) -> Double.compare(p1.y, p2.y));
+        
+        return closestPairRec(pointsByX, pointsByY);
+    }
+    
+    /**
+     * Recursive function to find closest pair
+     */
+    private static PointPair closestPairRec(Point[] pointsByX, Point[] pointsByY) {
+        int n = pointsByX.length;
+        
+        // Base case: use brute force for small arrays
+        if (n <= 3) {
+            return bruteForceClosest(pointsByX);
+        }
+        
+        // Find the middle point
+        int mid = n / 2;
+        Point midPoint = pointsByX[mid];
+        
+        // Divide points by x-coordinate
+        Point[] leftX = Arrays.copyOfRange(pointsByX, 0, mid);
+        Point[] rightX = Arrays.copyOfRange(pointsByX, mid, n);
+        
+        // Separate points by y-coordinate for left and right halves
+        Point[] leftY = new Point[mid];
+        Point[] rightY = new Point[n - mid];
+        int li = 0, ri = 0;
+        
+        for (Point point : pointsByY) {
+            if (point.x <= midPoint.x && li < mid) {
+                leftY[li++] = point;
+            } else {
+                rightY[ri++] = point;
+            }
+        }
+        
+        // Recursively find closest pairs in both halves
+        PointPair leftPair = closestPairRec(leftX, leftY);
+        PointPair rightPair = closestPairRec(rightX, rightY);
+        
+        // Find minimum distance from both halves
+        PointPair minPair = (leftPair.distance <= rightPair.distance) ? 
+                           leftPair : rightPair;
+        double minDist = minPair.distance;
+        
+        // Check points in the strip around the dividing line
+        List<Point> strip = new ArrayList<>();
+        for (Point point : pointsByY) {
+            if (Math.abs(point.x - midPoint.x) < minDist) {
+                strip.add(point);
+            }
+        }
+        
+        // Check distances in the strip
+        PointPair stripPair = findClosestInStrip(strip, minDist);
+        
+        return (stripPair != null && stripPair.distance < minDist) ? 
+               stripPair : minPair;
+    }
+    
+    /**
+     * Finds closest pair in the strip (optimized)
+     */
+    private static PointPair findClosestInStrip(List<Point> strip, double minDist) {
+        PointPair closest = null;
+        
+        for (int i = 0; i < strip.size(); i++) {
+            // Only check next 7 points (geometric property)
+            for (int j = i + 1; j < strip.size() && j < i + 8; j++) {
+                if (strip.get(j).y - strip.get(i).y >= minDist) {
+                    break; // No need to check further
+                }
+                
+                double dist = strip.get(i).distanceTo(strip.get(j));
+                if (dist < minDist) {
+                    closest = new PointPair(strip.get(i), strip.get(j));
+                    minDist = dist;
+                }
+            }
+        }
+        
+        return closest;
+    }
+    
+    /**
+     * Brute force method for small arrays
+     */
+    private static PointPair bruteForceClosest(Point[] points) {
+        PointPair closest = new PointPair(points[0], points[1]);
+        
+        for (int i = 0; i < points.length; i++) {
+            for (int j = i + 1; j < points.length; j++) {
+                PointPair current = new PointPair(points[i], points[j]);
+                if (current.distance < closest.distance) {
+                    closest = current;
+                }
+            }
+        }
+        
+        return closest;
+    }
+    
+    /**
+     * Test method
+     */
+    public static void main(String[] args) {
+        Point[] points = {
+            new Point(2, 3), new Point(12, 30), new Point(40, 50),
+            new Point(5, 1), new Point(12, 10), new Point(3, 4)
+        };
+        
+        PointPair result = findClosestPair(points);
+        System.out.printf("Closest pair: %s and %s\n", 
+                         result.p1, result.p2);
+        System.out.printf("Distance: %.4f\n", result.distance);
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Modular Exponentiation using Divide and Conquer}
+
+\subsection{Problem Statement}
+\begin{tcolorbox}[colback=orange!5!white,colframe=orange!50!black,title=\textbf{Modular Exponentiation Problem}]
+Given integers $a$, $n$, and $m$, compute $a^n \bmod m$ efficiently for large values of $n$.
+
+\textbf{Applications:} Cryptography (RSA), Number theory, Competitive programming
+\end{tcolorbox}
+
+\subsection{Mathematical Foundation}
+
+\textbf{Recursive Formula:}
+\[
+a^n = \begin{cases}
+1 & \text{if } n = 0 \\
+(a^{n/2})^2 & \text{if } n \text{ is even} \\
+a \cdot (a^{n/2})^2 & \text{if } n \text{ is odd}
+\end{cases}
+\]
+
+\textbf{Modular Properties:}
+\begin{align}
+(a \cdot b) \bmod m &= ((a \bmod m) \cdot (b \bmod m)) \bmod m \\
+(a^2) \bmod m &= ((a \bmod m)^2) \bmod m
+\end{align}
+
+\subsection{Java Implementation}
+
+\begin{lstlisting}[language=Java, caption=Modular Exponentiation Implementation]
+import java.math.BigInteger;
+
+public class ModularExponentiation {
+    
+    /**
+     * Computes (base^exponent) % modulus using divide and conquer
+     * Time Complexity: O(log exponent)
+     * Space Complexity: O(log exponent) due to recursion
+     * 
+     * @param base the base number
+     * @param exponent the exponent
+     * @param modulus the modulus
+     * @return (base^exponent) % modulus
+     */
+    public static long powerMod(long base, long exponent, long modulus) {
+        if (modulus == 1) return 0;
+        
+        // Handle negative base
+        base = ((base % modulus) + modulus) % modulus;
+        
+        return powerModHelper(base, exponent, modulus);
+    }
+    
+    /**
+     * Recursive helper function for modular exponentiation
+     */
+    private static long powerModHelper(long base, long exponent, long modulus) {
+        // Base case
+        if (exponent == 0) {
+            return 1;
+        }
+        
+        // Divide: compute base^(exponent/2) % modulus
+        long halfPower = powerModHelper(base, exponent / 2, modulus);
+        
+        // Conquer: square the result
+        long result = (halfPower * halfPower) % modulus;
+        
+        // Combine: if exponent is odd, multiply by base
+        if (exponent % 2 == 1) {
+            result = (result * base) % modulus;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Iterative version (more space efficient)
+     * Space Complexity: O(1)
+     */
+    public static long powerModIterative(long base, long exponent, long modulus) {
+        if (modulus == 1) return 0;
+        
+        base = ((base % modulus) + modulus) % modulus;
+        long result = 1;
+        
+        while (exponent > 0) {
+            // If exponent is odd, multiply result with base
+            if (exponent % 2 == 1) {
+                result = (result * base) % modulus;
+            }
+            
+            // Square the base and halve the exponent
+            base = (base * base) % modulus;
+            exponent /= 2;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Version for very large numbers using BigInteger
+     */
+    public static BigInteger powerModBig(BigInteger base, BigInteger exponent, 
+                                        BigInteger modulus) {
+        return base.modPow(exponent, modulus);
+    }
+    
+    /**
+     * Utility method to handle overflow safely
+     */
+    public static long multiplyMod(long a, long b, long modulus) {
+        return ((a % modulus) * (b % modulus)) % modulus;
+    }
+    
+    /**
+     * Extended version with detailed steps for educational purposes
+     */
+    public static long powerModWithSteps(long base, long exponent, long modulus) {
+        System.out.printf("Computing %d^%d mod %d:\n", base, exponent, modulus);
+        
+        if (modulus == 1) {
+            System.out.println("Modulus is 1, result is 0");
+            return 0;
+        }
+        
+        base = ((base % modulus) + modulus) % modulus;
+        long result = 1;
+        int step = 1;
+        
+        System.out.printf("Step 0: base = %d, result = %d\n", base, result);
+        
+        while (exponent > 0) {
+            if (exponent % 2 == 1) {
+                result = (result * base) % modulus;
+                System.out.printf("Step %d: exponent is odd, result = %d\n", 
+                                 step, result);
+            }
+            
+            base = (base * base) % modulus;
+            exponent /= 2;
+            
+            if (exponent > 0) {
+                System.out.printf("Step %d: base = %d, exponent = %d\n", 
+                                 step, base, exponent);
+            }
+            step++;
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Test method with examples
+     */
+    public static void main(String[] args) {
+        // Test cases
+        System.out.println("=== Modular Exponentiation Tests ===");
+        
+        // Basic test
+        long result1 = powerMod(3, 10, 1000);
+        System.out.printf("3^10 mod 1000 = %d\n", result1);
+        
+        // Large numbers test
+        long result2 = powerMod(2, 100, 1000000007);
+        System.out.printf("2^100 mod 1000000007 = %d\n", result2);
+        
+        // Comparison between recursive and iterative
+        System.out.println("\n=== Performance Comparison ===");
+        long start, end;
+        
+        start = System.nanoTime();
+        long rec = powerMod(2, 1000000, 1000000007);
+        end = System.nanoTime();
+        System.out.printf("Recursive: %d (Time: %d ns)\n", 
+                         rec, end - start);
+        
+        start = System.nanoTime();
+        long iter = powerModIterative(2, 1000000, 1000000007);
+        end = System.nanoTime();
+        System.out.printf("Iterative: %d (Time: %d ns)\n", 
+                         iter, end - start);
+        
+        // Educational example with steps
+        System.out.println("\n=== Step-by-step Example ===");
+        powerModWithSteps(5, 13, 1000);
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Selection Algorithm (k-th Smallest Element)}
+
+\subsection{Problem Statement}
+\begin{tcolorbox}[colback=purple!5!white,colframe=purple!50!black,title=\textbf{Selection Problem}]
+Given an unsorted array of $n$ elements, find the $k$-th smallest element efficiently.
+
+\textbf{Special Cases:}
+\begin{itemize}
+    \item $k = 1$: Minimum element
+    \item $k = n$: Maximum element  
+    \item $k = \lceil n/2 \rceil$: Median element
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Algorithm Variants}
+
+\begin{enumerate}
+    \item \textbf{Randomized QuickSelect:} Expected $O(n)$, worst-case $O(n^2)$
+    \item \textbf{Median-of-Medians:} Guaranteed $O(n)$ worst-case
+    \item \textbf{Sorting-based:} $O(n \log n)$ but simple to implement
+\end{enumerate}
+
+\subsection{Java Implementation}
+
+\begin{lstlisting}[language=Java, caption=Complete Selection Algorithm Implementation]
+import java.util.*;
+
+public class SelectionAlgorithms {
+    
+    private static Random random = new Random();
+    
+    /**
+     * Finds the k-th smallest element using Randomized QuickSelect
+     * Expected Time Complexity: O(n)
+     * Worst-case Time Complexity: O(n²)
+     * Space Complexity: O(log n) average, O(n) worst-case
+     * 
+     * @param arr the input array
+     * @param k the rank (1-indexed)
+     * @return the k-th smallest element
+     */
+    public static int quickSelect(int[] arr, int k) {
+        if (k < 1 || k > arr.length) {
+            throw new IllegalArgumentException("k must be between 1 and " + arr.length);
+        }
+        
+        return quickSelectHelper(arr, 0, arr.length - 1, k - 1); // Convert to 0-indexed
+    }
+    
+    /**
+     * Recursive helper for QuickSelect
+     */
+    private static int quickSelectHelper(int[] arr, int left, int right, int k) {
+        if (left == right) {
+            return arr[left];
+        }
+        
+        // Choose random pivot for better average performance
+        int pivotIndex = left + random.nextInt(right - left + 1);
+        pivotIndex = partition(arr, left, right, pivotIndex);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return quickSelectHelper(arr, left, pivotIndex - 1, k);
+        } else {
+            return quickSelectHelper(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    /**
+     * Partitions array around pivot element
+     * Returns the final position of the pivot
+     */
+    private static int partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        
+        // Move pivot to end
+        swap(arr, pivotIndex, right);
+        
+        int storeIndex = left;
+        
+        // Move all smaller elements to the left
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        
+        // Move pivot to its final place
+        swap(arr, right, storeIndex);
+        return storeIndex;
+    }
+    
+    /**
+     * Deterministic selection using Median-of-Medians
+     * Guaranteed O(n) time complexity
+     */
+    public static int medianOfMedians(int[] arr, int k) {
+        if (k < 1 || k > arr.length) {
+            throw new IllegalArgumentException("k must be between 1 and " + arr.length);
+        }
+        
+        return medianOfMediansHelper(arr, 0, arr.length - 1, k - 1);
+    }
+    
+    /**
+     * Recursive helper for Median-of-Medians algorithm
+     */
+    private static int medianOfMediansHelper(int[] arr, int left, int right, int k) {
+        int n = right - left + 1;
+        
+        // Base case: use sorting for small arrays
+        if (n <= 5) {
+            Arrays.sort(arr, left, right + 1);
+            return arr[left + k];
+        }
+        
+        // Divide into groups of 5 and find medians
+        int numGroups = (n + 4) / 5; // Ceiling division
+        int[] medians = new int[numGroups];
+        
+        for (int i = 0; i < numGroups; i++) {
+            int groupLeft = left + i * 5;
+            int groupRight = Math.min(groupLeft + 4, right);
+            
+            Arrays.sort(arr, groupLeft, groupRight + 1);
+            medians[i] = arr[groupLeft + (groupRight - groupLeft) / 2];
+        }
+        
+        // Find median of medians
+        int medianOfMedians = medianOfMediansHelper(medians, 0, numGroups - 1, numGroups / 2);
+        
+        // Find the index of median of medians in original array
+        int pivotIndex = -1;
+        for (int i = left; i <= right; i++) {
+            if (arr[i] == medianOfMedians) {
+                pivotIndex = i;
+                break;
+            }
+        }
+        
+        // Partition around the median of medians
+        pivotIndex = partition(arr, left, right, pivotIndex);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return medianOfMediansHelper(arr, left, pivotIndex - 1, k);
+        } else {
+            return medianOfMediansHelper(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    /**
+     * Iterative version of QuickSelect (space-efficient)
+     */
+    public static int quickSelectIterative(int[] arr, int k) {
+        if (k < 1 || k > arr.length) {
+            throw new IllegalArgumentException("k must be between 1 and " + arr.length);
+        }
+        
+        int left = 0;
+        int right = arr.length - 1;
+        k--; // Convert to 0-indexed
+        
+        while (left < right) {
+            int pivotIndex = left + random.nextInt(right - left + 1);
+            pivotIndex = partition(arr, left, right, pivotIndex);
+            
+            if (k == pivotIndex) {
+                return arr[k];
+            } else if (k < pivotIndex) {
+                right = pivotIndex - 1;
+            } else {
+                left = pivotIndex + 1;
+            }
+        }
+        
+        return arr[left];
+    }
+    
+    /**
+     * Utility method to find median
+     */
+    public static double findMedian(int[] arr) {
+        int n = arr.length;
+        if (n % 2 == 1) {
+            return quickSelect(arr.clone(), n / 2 + 1);
+        } else {
+            int[] copy = arr.clone();
+            int lower = quickSelect(copy, n / 2);
+            copy = arr.clone(); // Reset array
+            int upper = quickSelect(copy, n / 2 + 1);
+            return (lower + upper) / 2.0;
+        }
+    }
+    
+    /**
+     * Utility method to swap elements
+     */
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    /**
+     * Performance testing and validation
+     */
+    public static void performanceTest() {
+        int[] sizes = {1000, 10000, 100000, 1000000};
+        
+        System.out.println("=== Performance Comparison ===");
+        System.out.printf("%-10s %-15s %-15s %-15s\n", 
+                         "Size", "QuickSelect", "MoM", "Sorting");
+        System.out.println("-".repeat(60));
+        
+        for (int size : sizes) {
+            int[] arr = generateRandomArray(size);
+            int k = size / 2; // Find median
+            
+            // Test QuickSelect
+            long start = System.nanoTime();
+            quickSelect(arr.clone(), k);
+            long quickSelectTime = System.nanoTime() - start;
+            
+            // Test Median of Medians
+            start = System.nanoTime();
+            medianOfMedians(arr.clone(), k);
+            long momTime = System.nanoTime() - start;
+            
+            // Test sorting-based approach
+            start = System.nanoTime();
+            int[] sorted = arr.clone();
+            Arrays.sort(sorted);
+            int result = sorted[k - 1];
+            long sortTime = System.nanoTime() - start;
+            
+            System.out.printf("%-10d %-15d %-15d %-15d\n", 
+                             size, quickSelectTime/1000, momTime/1000, sortTime/1000);
+        }
+    }
+    
+    /**
+     * Generates random array for testing
+     */
+    private static int[] generateRandomArray(int size) {
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = random.nextInt(size * 10);
+        }
+        return arr;
+    }
+    
+    /**
+     * Test method with examples
+     */
+    public static void main(String[] args) {
+        // Example array
+        int[] arr = {3, 6, 2, 8, 1, 9, 4, 5, 7};
+        System.out.println("Original array: " + Arrays.toString(arr));
+        
+        // Test different k values
+        System.out.println("\n=== Finding k-th smallest elements ===");
+        for (int k = 1; k <= 5; k++) {
+            int result = quickSelect(arr.clone(), k);
+            System.out.printf("%d-th smallest: %d\n", k, result);
+        }
+        
+        // Find median
+        double median = findMedian(arr.clone());
+        System.out.printf("\nMedian: %.1f\n", median);
+        
+        // Validation test
+        int[] testArr = {5, 2, 8, 1, 9};
+        System.out.println("\n=== Validation Test ===");
+        System.out.println("Test array: " + Arrays.toString(testArr));
+        
+        for (int k = 1; k <= testArr.length; k++) {
+            int quickSelectResult = quickSelect(testArr.clone(), k);
+            int momResult = medianOfMedians(testArr.clone(), k);
+            
+            int[] sorted = testArr.clone();
+            Arrays.sort(sorted);
+            int expected = sorted[k - 1];
+            
+            System.out.printf("k=%d: QuickSelect=%d, MoM=%d, Expected=%d %s\n", 
+                             k, quickSelectResult, momResult, expected,
+                             (quickSelectResult == expected && momResult == expected) ? "✓" : "✗");
+        }
+        
+        // Performance test
+        System.out.println();
+        performanceTest();
+    }
+}
+\end{lstlisting}
+
+\newpage
+
+\section{Advanced Analysis and Comparisons}
+
+\subsection{Complexity Summary}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|l|c|c|c|l|}
+\hline
+\textbf{Algorithm} & \textbf{Best Case} & \textbf{Average Case} & \textbf{Worst Case} & \textbf{Space} \\
+\hline
+Inversion Count & $O(n \log n)$ & $O(n \log n)$ & $O(n \log n)$ & $O(n)$ \\
+Closest Pair & $O(n \log n)$ & $O(n \log n)$ & $O(n \log n)$ & $O(n \log n)$ \\
+Modular Exponentiation & $O(\log n)$ & $O(\log n)$ & $O(\log n)$ & $O(\log n)$ \\
+QuickSelect & $O(n)$ & $O(n)$ & $O(n^2)$ & $O(\log n)$ \\
+Median-of-Medians & $O(n)$ & $O(n)$ & $O(n)$ & $O(\log n)$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Practical Considerations}
+
+\subsubsection{When to Use Each Algorithm}
+
+\begin{description}
+    \item[Inversion Count:] Measuring sortedness, social network analysis, collaborative filtering
+    \item[Closest Pair:] Computational geometry, clustering, computer graphics
+    \item[Modular Exponentiation:] Cryptography, number theory, competitive programming
+    \item[QuickSelect:] When average-case performance is acceptable and simplicity is valued
+    \item[Median-of-Medians:] When worst-case guarantees are required
+\end{description}
+
+\subsubsection{Implementation Tips}
+
+\begin{enumerate}
+    \item \textbf{Overflow Prevention:} Use appropriate data types and modular arithmetic
+    \item \textbf{Random Number Generation:} Use high-quality randomization for QuickSelect
+    \item \textbf{Base Cases:} Optimize small input handling with iterative approaches
+    \item \textbf{Memory Management:} Consider iterative versions for space-critical applications
+\end{enumerate}
+
+\subsection{Extensions and Variants}
+
+\begin{itemize}
+    \item \textbf{Parallel Algorithms:} Multi-threaded implementations for large datasets
+    \item \textbf{External Memory:} Algorithms for data too large to fit in RAM
+    \item \textbf{Approximate Solutions:} Faster algorithms with probabilistic guarantees
+    \item \textbf{Online Algorithms:} Processing streaming data incrementally
+\end{itemize}
+
+\newpage
+
+\section{Conclusion}
+
+This comprehensive guide has presented professional implementations of fundamental divide-and-conquer algorithms with detailed analysis and practical considerations. Each implementation includes:
+
+\begin{itemize}
+    \item \textbf{Theoretical Foundation:} Mathematical analysis and complexity proofs
+    \item \textbf{Professional Code:} Production-ready Java implementations with error handling
+    \item \textbf{Performance Analysis:} Empirical testing and comparison methods
+    \item \textbf{Practical Applications:} Real-world use cases and optimization techniques
+\end{itemize}
+
+These algorithms form the backbone of many advanced computational techniques and are essential for competitive programming, software development, and algorithmic research.
+
+\subsection{Further Reading}
+
+\begin{itemize}
+    \item Cormen, T. H., et al. \textit{Introduction to Algorithms} (4th Edition)
+    \item Kleinberg, J., \& Tardos, E. \textit{Algorithm Design}
+    \item Sedgewick, R., \& Wayne, K. \textit{Algorithms} (4th Edition)
+\end{itemize}
+
+\vfill
+\begin{center}
+\rule{\textwidth}{1pt}
+\vspace{0.5em}
+\textit{Professional Algorithm Implementation Guide}\\
+\textbf{Data Structures and Algorithms} | \today
+\vspace{0.5em}
+\rule{\textwidth}{1pt}
+\end{center}
+
+\end{document}

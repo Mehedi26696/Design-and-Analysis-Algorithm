@@ -57,6 +57,18 @@ public class UnboundKnapsack {
                 }
             }
         }
+
+
+        // Print the slected items indexes
+        int w = capacity;
+        System.out.print("Selected items: ");
+        for (int i = n; i > 0 && w > 0; i--) {
+            if (dp[i][w] != dp[i - 1][w]) {
+                System.out.print((i - 1) + " "); // Print the index of the item
+                w -= weights[i - 1]; // Reduce the capacity by the weight of the included item
+            }
+        }
+        System.out.println(); // New line after printing selected items
         return dp[n][capacity];
     }
 
@@ -81,3 +93,11 @@ public class UnboundKnapsack {
     }
     
 }
+
+
+
+// Time Complexity:
+
+// Recursive: O(2^n) in the worst case
+// Memoization: O(n * capacity) due to the memoization table
+// DP: O(n * capacity) due to the 2D array used for storing results

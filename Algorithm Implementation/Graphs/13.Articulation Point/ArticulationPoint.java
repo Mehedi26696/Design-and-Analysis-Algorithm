@@ -55,7 +55,7 @@ public class ArticulationPoint {
             } else if (!visited[neigh]) {
                 dfs(graph, neigh, curr, disc, low, time, visited, isArticulation); // if the neighbour is not visited,
                                                                                    // call dfs on it
-                low[curr] = Math.min(low[curr], low[neigh]); // update the low value of the current node
+                low[curr] = Math.min(low[curr], low[neigh]); // update the low value of the current node // this is a tree edge
                 // if the lowest discovery time of the neighbour is greater than or equal to the
                 // discovery time of the current node,
 
@@ -70,7 +70,7 @@ public class ArticulationPoint {
                 children++; // increment the number of children of the current node
 
             } else {
-                low[curr] = Math.min(low[curr], disc[neigh]); // if the neighbour is already visited, update the low
+                low[curr] = Math.min(low[curr], disc[neigh]); // if the neighbour is already visited, update the low // this is a back edge
                                                               // value of the current node
             }
         }

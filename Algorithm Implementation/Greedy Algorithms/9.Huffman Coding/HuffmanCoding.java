@@ -61,3 +61,7 @@ public class HuffmanCoding {
         printCode(root, "");
     }
 }
+
+
+// Time Complexity: O(n log n)
+// - Building the Huffman tree: O(n log n) due to priority queue operations

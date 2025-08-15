@@ -23,8 +23,30 @@ public class RodCutting {
                 }
             }
         }
-        return dp[n][rodLength];
 
+        // dp table
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= rodLength; j++) {
+                System.out.print(dp[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // how to cut
+        int length = rodLength;
+        System.out.print("Rod should be cut at lengths: ");
+        while (length > 0) {
+            for (int i = n; i >= 1; i--) {
+                if (i <= length && dp[i][length] == dp[i][length - i] + prices[i - 1]) {
+                    System.out.print(i + " ");
+                    length -= i;
+                    break;
+                }
+            }
+        }
+        System.out.println();
+        return dp[n][rodLength];
     }
 
     public static void main(String[] args) {

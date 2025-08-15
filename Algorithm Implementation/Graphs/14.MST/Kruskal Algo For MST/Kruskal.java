@@ -121,4 +121,3 @@ public class Kruskal {
 // The above code implements Kruskal's algorithm to find the minimum spanning tree of a graph.
 // Time Complexity: O(E log E), where E is the number of edges in the graph. This is due to the sorting of edges.
 // Space Complexity: O(V), where V is the number of vertices in the graph. This is due to the disjoint set data structure used for union-find operations.
-

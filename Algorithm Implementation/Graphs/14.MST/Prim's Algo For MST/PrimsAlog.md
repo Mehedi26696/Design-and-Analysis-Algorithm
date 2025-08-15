@@ -1,4 +1,3 @@
-
 # Prim's Algorithm for Minimum Spanning Tree (MST)
 
 Prim's Algorithm is a greedy algorithm used to find the Minimum Spanning Tree (MST) of a connected, undirected graph. It starts with an arbitrary node and iteratively adds the smallest edge that connects a vertex in the growing MST to a vertex outside of it.
@@ -6,26 +5,28 @@ Prim's Algorithm is a greedy algorithm used to find the Minimum Spanning Tree (M
 ## Key Details
 
 ### Input
+
 - A graph represented as an adjacency matrix, adjacency list, or edge list.
 - The graph must be connected and undirected.
 - Optionally, a starting vertex can be specified.
 
 ### Output
+
 - A list or set of edges that form the MST.
 - The total weight of the MST.
 
 ### Algorithm Steps
+
 1. Initialize a priority queue (or min-heap) to store edges based on their weights.
 2. Start with an arbitrary vertex and mark it as visited.
 3. Add all edges connected to the starting vertex to the priority queue.
 4. While the priority queue is not empty:
-    - Extract the edge with the smallest weight.
-    - If the edge connects to an unvisited vertex:
-      - Add the edge to the MST.
-      - Mark the vertex as visited.
-      - Add all edges connected to the newly visited vertex to the priority queue.
+   - Extract the edge with the smallest weight.
+   - If the edge connects to an unvisited vertex:
+     - Add the edge to the MST.
+     - Mark the vertex as visited.
+     - Add all edges connected to the newly visited vertex to the priority queue.
 5. Repeat until all vertices are visited or the MST contains \(V-1\) edges, where \(V\) is the number of vertices.
-
 
 ### Java Implementation
 
@@ -146,29 +147,31 @@ public class Prims_Algo_Cost_Edge {
 ```
 
 ### Explanation of the Code
+
 1. **Edge Class**: Represents an edge with a vertex and weight, and implements `Comparable` for priority queue sorting.
 2. **Priority Queue**: Used to select the edge with the smallest weight efficiently.
 3. **Visited Array**: Tracks visited vertices to avoid cycles.
 4. **MST Construction**: Adds edges to the MST and calculates the total weight.
 5. **Graph Representation**: The graph is represented as an adjacency matrix.
 
- 
-
-
 ### Complexity
+
 - **Time Complexity**: \(O(E \log V)\), where \(E\) is the number of edges and \(V\) is the number of vertices. This assumes the use of a priority queue for edge selection.
 - **Space Complexity**: \(O(V + E)\), for storing the graph and auxiliary data structures.
 
 ### Applications
+
 - Network design (e.g., laying cables or pipelines with minimal cost).
 - Approximation algorithms for NP-hard problems like the Traveling Salesman Problem.
 - Cluster analysis in machine learning.
 
 ### Limitations
+
 - Only works for connected graphs. If the graph is disconnected, it will only find the MST for the connected component containing the starting vertex.
 - Does not handle negative edge weights differently, as it assumes all edge weights are non-negative.
 
 ### Edge Cases
+
 - Graph with only one vertex (MST is empty).
 - Graph with all edges having the same weight (any spanning tree is a valid MST).
 - Disconnected graph (algorithm will not produce a complete MST).

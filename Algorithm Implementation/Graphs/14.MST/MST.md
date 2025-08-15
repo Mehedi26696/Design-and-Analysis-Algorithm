@@ -16,18 +16,19 @@ A **Minimum Spanning Tree (MST)** is a subset of edges in a connected, weighted,
 ## Common Algorithms to Find MST
 
 1. **Kruskal's Algorithm**:
-    - Sort edges by weight in non-decreasing order.
-    - Add edges to the MST while avoiding cycles.
-    - Uses Disjoint Set Union (DSU) for cycle detection.
 
+   - Sort edges by weight in non-decreasing order.
+   - Add edges to the MST while avoiding cycles.
+   - Uses Disjoint Set Union (DSU) for cycle detection.
 2. **Prim's Algorithm**:
-    - Start with an arbitrary vertex.
-    - Grow the MST by adding the smallest edge connecting a vertex in the MST to one outside it.
-    - Efficiently implemented using a priority queue (min-heap).
 
+   - Start with an arbitrary vertex.
+   - Grow the MST by adding the smallest edge connecting a vertex in the MST to one outside it.
+   - Efficiently implemented using a priority queue (min-heap).
 3. **Borůvka's Algorithm**:
-    - Add the smallest edge from each component repeatedly until only one component remains.
-    - Suitable for parallel or distributed computing.
+
+   - Add the smallest edge from each component repeatedly until only one component remains.
+   - Suitable for parallel or distributed computing.
 
 ## Properties
 

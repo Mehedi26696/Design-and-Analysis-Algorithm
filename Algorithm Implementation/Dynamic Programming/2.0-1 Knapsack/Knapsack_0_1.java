@@ -44,7 +44,7 @@ public class Knapsack_0_1 {
         return d[n][capacity]; 
     }
 
-    static int KnapsackTabulation(int[] weights, int[] values, int capacity) {
+    static void KnapsackTabulation(int[] weights, int[] values, int capacity) {
         int n = weights.length;
         int[][] dp = new int[n + 1][capacity + 1];
 
@@ -52,22 +52,34 @@ public class Knapsack_0_1 {
 
         // Build the dp table in bottom-up manner
         for (int i = 1; i <= n; i++) {
-            for (int w = 0; w <= capacity; w++) {
+            for (int w = 1; w <= capacity; w++) {
                 if (weights[i - 1] <= w) {
-                    dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]); 
+                    dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);
                 } else {
                     dp[i][w] = dp[i - 1][w];
                 }
             }
         }
-        return dp[n][capacity];
+
+        System.out.println("Maximum value in Knapsack using Tabulation = " + dp[n][capacity]);
+        // the taken items are
+        int w = capacity;
+        while (n > 0 && w > 0) {
+            if (dp[n][w] != dp[n - 1][w]) {
+                System.out.println("Index of item taken: " + (n - 1));
+                w -= weights[n - 1];
+            }
+            n--;
+            
+        }
+        
     }
 
     public static void main(String[] args) {
-        int[] weights = { 10, 20, 30 };
-        int[] values = { 60, 100, 120 };
-        int capacity = 50;
 
+        int [] weights ={2,1,3,2};
+        int [] values = {12,10,20,15};
+        int capacity = 5;
         System.out.println("Maximum value in Knapsack = " + knapsackRecursion(weights, values, capacity, weights.length));
 
         // Memoization approach
@@ -80,7 +92,7 @@ public class Knapsack_0_1 {
         System.out.println("Maximum value in Knapsack using Memoization = " + maxValue);
 
         // Tabulation approach
-        int maxValueTabulation = KnapsackTabulation(weights, values, capacity);
-        System.out.println("Maximum value in Knapsack using Tabulation = " + maxValueTabulation);
+        KnapsackTabulation(weights, values, capacity);
+         
     }
 }

@@ -133,3 +133,15 @@ public class BST {
     }
 }
  
+
+// Time Complexity:
+// - Insertion: O(h) where h is the height of the tree
+// - Search: O(h) where h is the height of the tree
+// - LCA: O(h) where h is the height of the tree
+// - Inorder Traversal: O(n) where n is the number of nodes in the tree
+// Space Complexity:
+// - O(n) for the recursion stack in the worst case (if the tree is skewed)
+// - O(n) for storing the nodes in the tree
+// - O(n) for the input array of numbers
+
+// Note: The height of a balanced BST is O(log n), while in the worst case (skewed tree) it can be O(n).
